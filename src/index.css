@@ -1,2 +1,11 @@
+/* 1. Google Font MUST be at the absolute top of the file */
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+
+/* 2. Then import Tailwind and DaisyUI */
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* 3. Register the font as a Tailwind utility inside the @theme block */
+@theme {
+  --font-russo: "Russo One", sans-serif;
+}
