@@ -31,7 +31,7 @@ const Navbar = () => {
   ];
   return (
     <div>
-      <nav className="w-full bg-white text-[#2d3139] px-4 sm:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-100 relative z-50">
+      <nav className="w-full bg-white text-[#2d3139] px-4 sm:px-8 py-2 flex flex-col md:flex-row md:items-center md:justify-between   relative z-50 max-w-11/12 mx-auto rounded-full  border-2 border-[#0D2C54]">
         <div className="flex items-center justify-between w-full md:w-auto">
           {/* Logo */}
           <Logo></Logo>
@@ -40,9 +40,7 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 text-gray-600 hover:text-black focus:outline-none"
-          >
-            <img src="" alt="" />
-          </button>
+          ></button>
         </div>
 
         {/* Navigation Links & Actions */}
@@ -74,7 +72,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-4 md:pt-0 border-t border-gray-100 md:border-none">
-          <button className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+          <button className="w-full sm:w-auto px-5 py-2.5 rounded-xl   font-semibold text-[#0D2C54] border-1 border-[#0D2C54] hover:bg-gray-50 transition-colors">
             Sign In
           </button>
 
