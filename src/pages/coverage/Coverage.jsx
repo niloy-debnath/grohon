@@ -1,10 +1,10 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { useLoaderData } from "react-router";
 import "leaflet/dist/leaflet.css";
 
 // Fixing Leaflet default icon reference issues common in React bundles
 import L from "leaflet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -15,9 +15,27 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+// 1. Map Controller Component to leverage useMap hook
+const MapController = ({ centerCoords }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (centerCoords) {
+      // flyTo([lat, lng], zoomLevel, options)
+      map.flyTo(centerCoords, 11, {
+        animate: true,
+        duration: 1.5, // duration in seconds
+      });
+    }
+  }, [centerCoords, map]);
+
+  return null;
+};
+
 const Coverage = () => {
   const warehouses = useLoaderData() || [];
   const [searchQuery, setSearchQuery] = useState("");
+  const [mapCenter, setMapCenter] = useState(null);
 
   // Handles lookup matching either by district name or sub-areas array tags
   const filteredWarehouses = warehouses.filter((warehouse) => {
@@ -28,6 +46,15 @@ const Coverage = () => {
     );
     return matchDistrict || matchAreas;
   });
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // If there's a match, trigger flyTo using the first filtered result
+    if (filteredWarehouses.length > 0) {
+      const target = filteredWarehouses[0];
+      setMapCenter([target.latitude, target.longitude]);
+    }
+  };
 
   return (
     <div className="w-[91%] max-w-7xl mx-auto py-12 font-urbanist flex flex-col items-center text-left">
@@ -55,24 +82,31 @@ const Coverage = () => {
               />
             </svg>
           </div>
-          <input
-            type="text"
-            placeholder="Search here"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-transparent border-none outline-none pl-3 text-sm font-medium text-gray-700 placeholder-gray-400"
-          />
-          <button className="bg-[#bdf05d] hover:bg-[#a6d64c] text-[#0d2c54] font-bold text-sm px-6 py-2.5 rounded-full transition-colors duration-200 select-none">
-            Search
-          </button>
+
+          <form
+            onSubmit={handleSearch}
+            className="flex items-center w-full justify-between"
+          >
+            <input
+              type="text"
+              placeholder="Search here"
+              name="location"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent border-none outline-none pl-3 text-sm font-medium text-gray-700 placeholder-gray-400"
+            />
+            <button className="bg-[#FFB400] hover:bg-[#eeff00] text-[#0d2c54] font-bold text-sm px-6 py-2.5 rounded-full transition-colors duration-200 select-none">
+              Search
+            </button>
+          </form>
         </div>
       </div>
 
       {/* MATRIX DIVIDER BOUNDARY RULE */}
-      <hr className="border-gray-200/80 my-10" />
+      <hr className="w-full border-gray-200/80 my-10" />
 
       {/* SECONDARY MAP SECTION CALLOUT */}
-      <div className="mb-6">
+      <div className="mb-6 w-full">
         <h2 className="text-xl md:text-2xl font-extrabold text-[#0D2C54] tracking-tight text-left">
           We deliver almost all over Bangladesh
         </h2>
@@ -86,6 +120,9 @@ const Coverage = () => {
           scrollWheelZoom={false}
           className="w-full h-[55vh] md:h-[65vh]"
         >
+          {/* 2. Embedded our Controller to smoothly intercept map instance updates */}
+          <MapController centerCoords={mapCenter} />
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
