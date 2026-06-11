@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Logo from "../logo/Logo";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,29 +73,33 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto pt-4 md:pt-0 border-t border-gray-100 md:border-none">
-          <button className="w-full sm:w-auto px-5 py-2.5 rounded-xl   font-semibold text-[#0D2C54] border-1 border-[#0D2C54] hover:bg-gray-50 transition-colors">
-            Sign In
-          </button>
+          <Link to={"/login"}>
+            <button className="w-full sm:w-auto px-5 py-2.5 rounded-xl   font-semibold text-[#0D2C54] border-1 border-[#0D2C54] hover:bg-gray-50 transition-colors">
+              Sign In
+            </button>
+          </Link>
 
-          <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#FFB400] text-black font-semibold pl-5 pr-2 py-2 rounded-xl hover:bg-[#b4d64b] transition-colors group">
-            Sign Up
-            <div className="bg-[#22252a] text-[#FFB400] w-8 h-8 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                />
-              </svg>
-            </div>
-          </button>
+          <Link to={"/register"}>
+            <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#FFB400] text-black font-semibold pl-5 pr-2 py-2 rounded-xl hover:bg-[#b4d64b] transition-colors group">
+              Sign Up
+              <div className="bg-[#22252a] text-[#FFB400] w-8 h-8 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                  />
+                </svg>
+              </div>
+            </button>
+          </Link>
         </div>
       </nav>
     </div>
